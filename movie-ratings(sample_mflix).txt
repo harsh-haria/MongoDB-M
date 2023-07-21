@@ -1,0 +1,15 @@
+In db sample_mflix, collection movies, 
+find all movies having imdb rating more than 7 + at least 10 reviews + tomatoes rating more than 8 with at least 50 reviews.
+
+db.movies.aggregate([
+    {
+        $match: {
+            $and: [
+                { "imdb.rating": {$gte: 7} },
+                { "imdb.votes": {$gte: 10} },
+                { "tomatoes.viewer.rating": {$gt:8} },
+                { "tomatoes.viewer.numReviews": { $gte: 50 } }
+            ]
+        }
+    }
+])
