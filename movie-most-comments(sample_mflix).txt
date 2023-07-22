@@ -1,0 +1,30 @@
+In db sample_mflix, collections movies and comments, 
+find the name/title of the movie having the most comments 
+
+db.movies.aggregate([
+    {
+        $lookup: {
+            from: "comments",
+            localField: "_id",
+            foreignField: "movie_id",
+            as: "comments"
+        }
+    },
+    {
+        $project: {
+            title: 1,
+            commentCount: { $size: "$comments" }
+        }
+    },
+    {
+        $match: { "commentCount": { $gt:0 } }
+    },
+    {
+        $sort: { commentCount: -1 }
+    },
+    {
+        $limit: 1
+    }
+])
+
+#match of 'commentCount' is optional, but i think it will be faster if we do it before sort 
