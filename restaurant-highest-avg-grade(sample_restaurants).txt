@@ -1,0 +1,18 @@
+In db sample_restaurants, collection restaurants, 
+find the top 5 restaurants with highest average grade score -- (grades.score)
+
+
+db.restaurants.aggregate([
+    { 
+        $unwind: "$grades" 
+    },
+    { 
+        $group : { _id: "$_id" , finalGrade: { $avg: "$grades.score" } } 
+    },
+    { 
+        $sort: { finalGrade: -1 } 
+    },
+    { 
+        $limit: 5 
+    }
+])
