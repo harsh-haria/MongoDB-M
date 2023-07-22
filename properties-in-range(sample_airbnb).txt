@@ -1,0 +1,19 @@
+In db sample_airbnb, collection listingsAndReviews, 
+find the number of properties in 10km range of the coordinates - [-8.61308, 41.1413] (This is long first, then lat) (Hint: check geo stages and operators in MongoDB)
+
+db.listingsAndReviews.aggregate([
+    {
+        $geoNear: { 
+            near: { type: "Point", coordinates: [-8.61308, 41.1413] },
+            distanceField: "distance",
+            maxDistance: 10000,
+            spherical: true
+        }
+    },
+    { 
+        $group: { _id:null, placesin10km:{ $sum:1} } 
+    },
+    { 
+        $project: {"_id":0} 
+    }
+])
